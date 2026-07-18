@@ -3018,6 +3018,13 @@ class ChessEngine {
           delete map[move.to];
         }
       }
+
+      // Flip turn of game in standard fen
+      const fen = game.fen();
+      const parts = fen.split(' ');
+      const nextTurn = parts[1] === 'w' ? 'b' : 'w';
+      const nextFen = `${parts[0]} ${nextTurn} ${parts.slice(2).join(' ')}`;
+      game.load(nextFen);
     } else {
       game.move(move);
     }
@@ -7096,6 +7103,8 @@ class GameController {
         }
         delete this.fairyPieceMap[moveObj.from];
       }
+      
+      this.flipTurnInGame(this.game);
       return moveObj;
     } else {
       return this.game.move(moveObj);
