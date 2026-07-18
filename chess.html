@@ -4287,8 +4287,9 @@ class GameController {
           const isFairy = ['c', 'j', 'd', 'z'].includes(piece.type.toLowerCase());
           const pieceClass = piece.color === 'w' ? 'white' : 'black';
           if (isFairy) {
-            const styleString = this.getFairyPieceStyle(piece.color, piece.type);
-            html += `<div class="piece ${pieceClass} fairy-piece" data-square="${square}" style="${styleString} pointer-events:none; z-index:2; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));"></div>`;
+            const fairyMap = { c: 'C', d: 'A', z: 'M', j: 'J' };
+            const url = `./assets/fairy/${piece.color}${fairyMap[piece.type.toLowerCase()]}.svg`;
+            html += `<div class="piece ${pieceClass} fairy-piece" data-square="${square}" style="background-image: url('${url}'); pointer-events:none; z-index:2; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));"></div>`;
           } else {
             const url = PIECE_URLS[piece.color][piece.type];
             html += `<div class="piece ${pieceClass}" data-square="${square}" style="background-image: url('${url}');"></div>`;
@@ -6587,37 +6588,6 @@ class GameController {
     game.load(nextFen);
   }
 
-  getFairyPieceStyle(colorChar, typeChar) {
-    const theme = this.currentPieceTheme || 'cburnett';
-    const c = colorChar === 'w' ? 'w' : 'b';
-    const knight = `url('https://lichess1.org/assets/piece/${theme}/${c}N.svg')`;
-    const queen = `url('https://lichess1.org/assets/piece/${theme}/${c}Q.svg')`;
-    const rook = `url('https://lichess1.org/assets/piece/${theme}/${c}R.svg')`;
-    const bishop = `url('https://lichess1.org/assets/piece/${theme}/${c}B.svg')`;
-    
-    let bg = '';
-    let extra = `background-repeat: no-repeat; `;
-    switch (typeChar.toLowerCase()) {
-      case 'c': // Chancellor = Rook + Knight
-        bg = `${knight}, ${rook}`;
-        extra += `background-size: 55%, 100%; background-position: center 30%, center bottom; `;
-        break;
-      case 'd': // Dragon = Bishop + Knight
-        bg = `${knight}, ${bishop}`;
-        extra += `background-size: 55%, 100%; background-position: center 30%, center bottom; `;
-        break;
-      case 'z': // Amazon = Queen + Knight
-        bg = `${knight}, ${queen}`;
-        extra += `background-size: 50%, 100%; background-position: center 40%, center bottom; `;
-        break;
-      case 'j': // Zebra = Flipped Knight
-        bg = `${knight}`;
-        extra += `background-size: 100%; background-position: center; transform: scaleX(-1); `;
-        break;
-    }
-    return `background-image: ${bg}; ${extra}`;
-  }
-
   updateEditorPaletteImages() {
     document.querySelectorAll('.palette-item[data-piece]').forEach(item => {
       const piece = item.dataset.piece;
@@ -6626,8 +6596,9 @@ class GameController {
       const isWhite = piece === piece.toUpperCase();
       const colorChar = isWhite ? 'w' : 'b';
       if (['c', 'j', 'd', 'z'].includes(lower)) {
-        // Apply composite style directly to the palette item
-        item.style.cssText += this.getFairyPieceStyle(colorChar, lower);
+        // Map the internal piece characters to PyChess filenames
+        const fairyMap = { c: 'C', d: 'A', z: 'M', j: 'J' };
+        item.style.cssText = `background-image: url('./assets/fairy/${colorChar}${fairyMap[lower]}.svg'); background-size: cover;`;
         item.textContent = '';
         return;
       }
