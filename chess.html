@@ -6983,52 +6983,75 @@ class GameController {
   isKingInCheck(game, color) {
     const board = game.board();
     let kingSq = null;
+    let kingR = -1;
+    let kingC = -1;
+    
+    // Find King
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
         const p = board[r][c];
         if (p && p.type === 'k' && p.color === color) {
+          kingR = r;
+          kingC = c;
           kingSq = String.fromCharCode(97 + c) + (8 - r);
           break;
         }
       }
+      if (kingSq) break;
     }
     if (!kingSq) return false;
     
     const opponentColor = color === 'w' ? 'b' : 'w';
-    
-    const checkAttacker = (testType, allowedTypes) => {
-      const orig = game.get(kingSq);
-      game.put({ type: testType, color: color }, kingSq);
-      const moves = game.moves({ square: kingSq, verbose: true });
-      if (orig) game.put(orig, kingSq);
-      else game.remove(kingSq);
-      
-      return moves.some(m => {
-        let destPiece = game.get(m.to);
-        if (destPiece && this.isFairyGame && this.fairyPieceMap && this.fairyPieceMap[m.to]) {
-          destPiece = { ...destPiece, type: this.fairyPieceMap[m.to] };
+
+    // 1. Knight attacks (Knight, Dragon, Chancellor, Amazon)
+    const knightOffsets = [
+      [-2, -1], [-2, 1], [-1, -2], [-1, 2],
+      [1, -2], [1, 2], [2, -1], [2, 1]
+    ];
+    for (const [dr, dc] of knightOffsets) {
+      const nr = kingR + dr;
+      const nc = kingC + dc;
+      if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
+        let p = board[nr][nc];
+        if (p && p.color === opponentColor) {
+          const sq = String.fromCharCode(97 + nc) + (8 - nr);
+          const type = (this.isFairyGame && this.fairyPieceMap && this.fairyPieceMap[sq]) 
+            ? this.fairyPieceMap[sq] 
+            : p.type;
+          if (['n', 'd', 'c', 'z'].includes(type.toLowerCase())) {
+            return true;
+          }
         }
-        return destPiece && destPiece.color === opponentColor && allowedTypes.includes(destPiece.type.toLowerCase());
-      });
-    };
-    
-    // Check Knights, Dragons, Chancellors, Amazons
-    if (checkAttacker('n', ['n', 'd', 'c', 'z'])) return true;
-    
-    // Check Bishops, Dragons, Amazons
-    if (checkAttacker('b', ['b', 'd', 'z'])) return true;
-    
-    // Check Rooks, Chancellors, Amazons
-    if (checkAttacker('r', ['r', 'c', 'z'])) return true;
-    
-    // Check Queens, Amazons
-    if (checkAttacker('q', ['q', 'z'])) return true;
-    
-    // Check Pawns
-    const rankOffset = color === 'w' ? 1 : -1;
+      }
+    }
+
+    // 2. Zebra attacks
+    const zebraOffsets = [
+      [-3, -2], [-3, 2], [-2, -3], [-2, 3],
+      [2, -3], [2, 3], [3, -2], [3, 2]
+    ];
+    for (const [dr, dc] of zebraOffsets) {
+      const nr = kingR + dr;
+      const nc = kingC + dc;
+      if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
+        let p = board[nr][nc];
+        if (p && p.color === opponentColor) {
+          const sq = String.fromCharCode(97 + nc) + (8 - nr);
+          const type = (this.isFairyGame && this.fairyPieceMap && this.fairyPieceMap[sq]) 
+            ? this.fairyPieceMap[sq] 
+            : p.type;
+          if (type.toLowerCase() === 'j') {
+            return true;
+          }
+        }
+      }
+    }
+
+    // 3. Pawn attacks
+    const pawnRankOffset = color === 'w' ? 1 : -1;
     const kingRank = parseInt(kingSq[1]);
     const kingFileIdx = kingSq.charCodeAt(0) - 97;
-    const pawnRank = kingRank + rankOffset;
+    const pawnRank = kingRank + pawnRankOffset;
     if (pawnRank >= 1 && pawnRank <= 8) {
       for (const fileOffset of [-1, 1]) {
         const pawnFileIdx = kingFileIdx + fileOffset;
@@ -7041,14 +7064,13 @@ class GameController {
         }
       }
     }
-    
-    // Check adjacent King
-    const kingR = 8 - kingRank;
+
+    // 4. Adjacent King attacks
     for (let dr = -1; dr <= 1; dr++) {
       for (let dc = -1; dc <= 1; dc++) {
         if (dr === 0 && dc === 0) continue;
         const nr = kingR + dr;
-        const nc = kingFileIdx + dc;
+        const nc = kingC + dc;
         if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
           const p = board[nr][nc];
           if (p && p.color === opponentColor && p.type.toLowerCase() === 'k') {
@@ -7057,27 +7079,56 @@ class GameController {
         }
       }
     }
-    
-    // Check Zebras
-    const zebraOffsets = [
-      [3, 2], [3, -2], [-3, 2], [-3, -2],
-      [2, 3], [2, -3], [-2, 3], [-2, -3]
-    ];
-    for (const [df, dr] of zebraOffsets) {
-      const nf = kingFileIdx + df;
-      const nr = kingRank - 1 + dr;
-      if (nf >= 0 && nf < 8 && nr >= 0 && nr < 8) {
-        const targetSq = String.fromCharCode(97 + nf) + (nr + 1);
-        let p = game.get(targetSq);
-        if (p && this.isFairyGame && this.fairyPieceMap && this.fairyPieceMap[targetSq]) {
-          p = { ...p, type: this.fairyPieceMap[targetSq] };
+
+    // 5. Sliding attacks (Rook, Bishop, Queen, Chancellor, Dragon, Amazon)
+    // Straight directions (Rook, Queen, Chancellor, Amazon)
+    const straightDirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+    for (const [dr, dc] of straightDirs) {
+      let nr = kingR + dr;
+      let nc = kingC + dc;
+      while (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
+        let p = board[nr][nc];
+        if (p) {
+          if (p.color === opponentColor) {
+            const sq = String.fromCharCode(97 + nc) + (8 - nr);
+            const type = (this.isFairyGame && this.fairyPieceMap && this.fairyPieceMap[sq]) 
+              ? this.fairyPieceMap[sq] 
+              : p.type;
+            if (['r', 'q', 'c', 'z'].includes(type.toLowerCase())) {
+              return true;
+            }
+          }
+          break; // Blocked
         }
-        if (p && p.color === opponentColor && p.type.toLowerCase() === 'j') {
-          return true;
-        }
+        nr += dr;
+        nc += dc;
       }
     }
-    
+
+    // Diagonal directions (Bishop, Queen, Dragon, Amazon)
+    const diagDirs = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+    for (const [dr, dc] of diagDirs) {
+      let nr = kingR + dr;
+      let nc = kingC + dc;
+      while (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
+        let p = board[nr][nc];
+        if (p) {
+          if (p.color === opponentColor) {
+            const sq = String.fromCharCode(97 + nc) + (8 - nr);
+            const type = (this.isFairyGame && this.fairyPieceMap && this.fairyPieceMap[sq]) 
+              ? this.fairyPieceMap[sq] 
+              : p.type;
+            if (['b', 'q', 'd', 'z'].includes(type.toLowerCase())) {
+              return true;
+            }
+          }
+          break; // Blocked
+        }
+        nr += dr;
+        nc += dc;
+      }
+    }
+
     return false;
   }
 
