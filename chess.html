@@ -6600,9 +6600,13 @@ class GameController {
       if (['c', 'j', 'd', 'z'].includes(lower)) {
         // Map the internal piece characters to AI generated filenames
         const fairyMap = { c: 'C', d: 'A', z: 'M', j: 'J' };
-        let filter = '';
-        if (!isWhite) filter = 'filter: invert(1);';
-        item.style.cssText = `background-image: url('./assets/fairy/w${fairyMap[lower]}.png'); background-size: cover; ${filter}`;
+        item.style.backgroundImage = `url('./assets/fairy/w${fairyMap[lower]}.png')`;
+        item.style.backgroundSize = 'cover';
+        if (!isWhite) {
+          item.style.filter = 'invert(1)';
+        } else {
+          item.style.filter = 'none';
+        }
         item.textContent = '';
         return;
       }
