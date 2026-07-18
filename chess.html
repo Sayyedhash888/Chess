@@ -4288,8 +4288,10 @@ class GameController {
           const pieceClass = piece.color === 'w' ? 'white' : 'black';
           if (isFairy) {
             const fairyMap = { c: 'C', d: 'A', z: 'M', j: 'J' };
-            const url = `./assets/fairy/${piece.color}${fairyMap[piece.type.toLowerCase()]}.svg`;
-            html += `<div class="piece ${pieceClass} fairy-piece" data-square="${square}" style="background-image: url('${url}'); pointer-events:none; z-index:2; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));"></div>`;
+            const url = `./assets/fairy/w${fairyMap[piece.type.toLowerCase()]}.png`;
+            let filter = 'drop-shadow(0 2px 2px rgba(0,0,0,0.3))';
+            if (piece.color === 'b') filter = 'invert(1) drop-shadow(0 -2px 2px rgba(0,0,0,0.3))';
+            html += `<div class="piece ${pieceClass} fairy-piece" data-square="${square}" style="background-image: url('${url}'); pointer-events:none; z-index:2; filter: ${filter};"></div>`;
           } else {
             const url = PIECE_URLS[piece.color][piece.type];
             html += `<div class="piece ${pieceClass}" data-square="${square}" style="background-image: url('${url}');"></div>`;
@@ -6596,9 +6598,11 @@ class GameController {
       const isWhite = piece === piece.toUpperCase();
       const colorChar = isWhite ? 'w' : 'b';
       if (['c', 'j', 'd', 'z'].includes(lower)) {
-        // Map the internal piece characters to PyChess filenames
+        // Map the internal piece characters to AI generated filenames
         const fairyMap = { c: 'C', d: 'A', z: 'M', j: 'J' };
-        item.style.cssText = `background-image: url('./assets/fairy/${colorChar}${fairyMap[lower]}.svg'); background-size: cover;`;
+        let filter = '';
+        if (!isWhite) filter = 'filter: invert(1);';
+        item.style.cssText = `background-image: url('./assets/fairy/w${fairyMap[lower]}.png'); background-size: cover; ${filter}`;
         item.textContent = '';
         return;
       }
