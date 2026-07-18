@@ -2123,13 +2123,16 @@ body[data-theme="cyberpunk"] {
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
-  background: #120804;
+  background: #0a0e17;
   background-image: 
-    radial-gradient(at 0% 0%, #201007 0px, transparent 50%),
-    radial-gradient(at 50% 0%, #2d1306 0px, transparent 50%),
-    radial-gradient(at 100% 0%, #1c0c05 0px, transparent 50%),
-    radial-gradient(at 0% 100%, #150904 0px, transparent 50%),
-    radial-gradient(at 100% 100%, #2a1105 0px, transparent 50%);
+    radial-gradient(at 0% 0%, #111a2e 0px, transparent 50%),
+    radial-gradient(at 50% 0%, #14223a 0px, transparent 50%),
+    radial-gradient(at 100% 0%, #0d1624 0px, transparent 50%),
+    radial-gradient(at 0% 100%, #060912 0px, transparent 50%),
+    radial-gradient(at 100% 100%, #121c33 0px, transparent 50%);
+  --landing-accent: #4fd1c5;
+  --landing-accent-bright: #81e6d9;
+  --landing-accent-glow: rgba(79, 209, 197, 0.25);
 }
 
 #landing-page.hidden {
@@ -2157,7 +2160,7 @@ body[data-theme="cyberpunk"] {
   left: 10%;
   width: 350px;
   height: 350px;
-  background: radial-gradient(circle, rgba(212, 168, 67, 0.25) 0%, transparent 80%);
+  background: radial-gradient(circle, rgba(79, 209, 197, 0.2) 0%, transparent 80%);
 }
 
 .orb-2 {
@@ -2165,7 +2168,7 @@ body[data-theme="cyberpunk"] {
   right: 5%;
   width: 450px;
   height: 450px;
-  background: radial-gradient(circle, rgba(184, 75, 75, 0.2) 0%, transparent 80%);
+  background: radial-gradient(circle, rgba(99, 179, 237, 0.18) 0%, transparent 80%);
 }
 
 .orb-3 {
@@ -2173,7 +2176,7 @@ body[data-theme="cyberpunk"] {
   left: 20%;
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(212, 168, 67, 0.15) 0%, transparent 80%);
+  background: radial-gradient(circle, rgba(159, 122, 234, 0.12) 0%, transparent 80%);
 }
 
 /* Landing navigation (Suspended glass bar) */
@@ -2187,10 +2190,10 @@ body[data-theme="cyberpunk"] {
   margin: 24px auto 0;
   width: calc(100% - 48px);
   max-width: 1200px;
-  background: rgba(42, 22, 16, 0.25);
+  background: rgba(16, 26, 42, 0.3);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(212, 168, 67, 0.15);
+  border: 1px solid rgba(99, 179, 237, 0.15);
   border-radius: 20px;
   box-shadow: 
     0 10px 40px rgba(0, 0, 0, 0.3),
@@ -2205,11 +2208,11 @@ body[data-theme="cyberpunk"] {
 
 .landing-logo-icon {
   font-size: 32px;
-  background: linear-gradient(135deg, var(--accent-bright), var(--accent));
+  background: linear-gradient(135deg, var(--landing-accent-bright), var(--landing-accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 2px 8px var(--accent-glow));
+  filter: drop-shadow(0 2px 8px var(--landing-accent-glow));
 }
 
 .landing-logo h1 {
@@ -2225,7 +2228,7 @@ body[data-theme="cyberpunk"] {
 .landing-nav-btn {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(212, 168, 67, 0.25);
+  border: 1px solid rgba(99, 179, 237, 0.2);
   color: var(--text-primary);
   padding: 10px 24px;
   border-radius: 50px;
@@ -2238,9 +2241,9 @@ body[data-theme="cyberpunk"] {
 }
 
 .landing-nav-btn:hover {
-  background: rgba(212, 168, 67, 0.12);
-  border-color: var(--accent-bright);
-  box-shadow: 0 0 24px var(--accent-glow);
+  background: rgba(79, 209, 197, 0.12);
+  border-color: var(--landing-accent-bright);
+  box-shadow: 0 0 24px var(--landing-accent-glow);
   transform: translateY(-2px);
 }
 
@@ -2258,10 +2261,10 @@ body[data-theme="cyberpunk"] {
 }
 
 .landing-hero-glass {
-  background: rgba(42, 22, 16, 0.3);
+  background: rgba(16, 26, 42, 0.35);
   backdrop-filter: blur(24px) saturate(200%);
   -webkit-backdrop-filter: blur(24px) saturate(200%);
-  border: 1px solid rgba(212, 168, 67, 0.12);
+  border: 1px solid rgba(99, 179, 237, 0.12);
   border-radius: 32px;
   padding: 56px 40px;
   max-width: 900px;
@@ -2280,13 +2283,13 @@ body[data-theme="cyberpunk"] {
   font-size: 11px;
   letter-spacing: 4px;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--landing-accent);
   font-weight: 700;
   margin-bottom: 24px;
   padding: 6px 18px;
-  border: 1px solid rgba(212, 168, 67, 0.25);
+  border: 1px solid rgba(79, 209, 197, 0.25);
   border-radius: 50px;
-  background: rgba(212, 168, 67, 0.08);
+  background: rgba(79, 209, 197, 0.08);
   display: inline-block;
   animation: fadeSlideDown 0.6s ease both;
   backdrop-filter: blur(8px);
@@ -2303,7 +2306,7 @@ body[data-theme="cyberpunk"] {
   font-weight: 700;
   line-height: 1.1;
   margin-bottom: 20px;
-  background: linear-gradient(160deg, #ffffff 10%, #f4e3c5 50%, var(--accent) 100%);
+  background: linear-gradient(160deg, #ffffff 10%, #e6fffa 50%, var(--landing-accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2331,29 +2334,29 @@ body[data-theme="cyberpunk"] {
 }
 
 .landing-cta-primary {
-  background: linear-gradient(135deg, var(--accent), #b8902f);
+  background: linear-gradient(135deg, var(--landing-accent), #319795);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50px;
-  color: #1a1208;
+  color: #0a0e17;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 700;
   padding: 14px 32px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  box-shadow: 0 8px 32px rgba(212, 168, 67, 0.35);
+  box-shadow: 0 8px 32px rgba(79, 209, 197, 0.3);
   letter-spacing: 0.5px;
 }
 
 .landing-cta-primary:hover {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 16px 48px rgba(212, 168, 67, 0.5);
-  background: linear-gradient(135deg, var(--accent-bright), var(--accent));
+  box-shadow: 0 16px 48px rgba(79, 209, 197, 0.45);
+  background: linear-gradient(135deg, var(--landing-accent-bright), var(--landing-accent));
 }
 
 .landing-cta-secondary {
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(212, 168, 67, 0.25);
+  border: 1px solid rgba(79, 209, 197, 0.25);
   border-radius: 50px;
   color: var(--text-primary);
   font-family: 'Inter', sans-serif;
@@ -2366,10 +2369,10 @@ body[data-theme="cyberpunk"] {
 }
 
 .landing-cta-secondary:hover {
-  border-color: var(--accent-bright);
-  background: rgba(212, 168, 67, 0.12);
+  border-color: var(--landing-accent-bright);
+  background: rgba(79, 209, 197, 0.12);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(212, 168, 67, 0.15);
+  box-shadow: 0 8px 24px rgba(79, 209, 197, 0.15);
 }
 
 /* Animated chess board preview */
@@ -2381,7 +2384,7 @@ body[data-theme="cyberpunk"] {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 
-    0 0 0 1px rgba(212, 168, 67, 0.2),
+    0 0 0 1px rgba(79, 209, 197, 0.2),
     0 15px 50px rgba(0, 0, 0, 0.6);
   margin-top: 12px;
   animation: fadeSlideDown 0.8s 0.4s ease both;
@@ -2398,8 +2401,8 @@ body[data-theme="cyberpunk"] {
   font-size: 16px;
 }
 
-.mini-sq.l { background: #f4e3c5; }
-.mini-sq.d { background: #b84b4b; }
+.mini-sq.l { background: #edf2f7; }
+.mini-sq.d { background: #4a5568; }
 
 /* Stats grid (Glass Cards) */
 .landing-stats {
@@ -2413,10 +2416,10 @@ body[data-theme="cyberpunk"] {
 }
 
 .landing-stat-card {
-  background: rgba(42, 22, 16, 0.2);
+  background: rgba(16, 26, 42, 0.2);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(212, 168, 67, 0.12);
+  border: 1px solid rgba(99, 179, 237, 0.12);
   border-radius: 20px;
   padding: 20px 12px;
   text-align: center;
@@ -2426,15 +2429,15 @@ body[data-theme="cyberpunk"] {
 
 .landing-stat-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(212, 168, 67, 0.3);
-  background: rgba(42, 22, 16, 0.35);
+  border-color: rgba(79, 209, 197, 0.3);
+  background: rgba(16, 26, 42, 0.35);
 }
 
 .landing-stat-num {
   font-family: 'Cormorant Garamond', serif;
   font-size: 38px;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--landing-accent);
   line-height: 1;
 }
 
@@ -2478,10 +2481,10 @@ body[data-theme="cyberpunk"] {
 }
 
 .feature-card {
-  background: rgba(42, 22, 16, 0.25);
+  background: rgba(16, 26, 42, 0.3);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(212, 168, 67, 0.12);
+  border: 1px solid rgba(99, 179, 237, 0.12);
   border-radius: 24px;
   padding: 32px 24px;
   cursor: pointer;
@@ -2498,7 +2501,7 @@ body[data-theme="cyberpunk"] {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--card-accent, var(--accent)), transparent);
+  background: linear-gradient(90deg, transparent, var(--card-accent, var(--landing-accent)), transparent);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -2506,12 +2509,12 @@ body[data-theme="cyberpunk"] {
 .feature-card:hover::before { opacity: 1; }
 
 .feature-card:hover {
-  border-color: var(--card-accent, var(--accent));
+  border-color: var(--card-accent, var(--landing-accent));
   transform: translateY(-8px);
   box-shadow: 
     0 30px 60px rgba(0,0,0,0.4), 
-    0 0 30px rgba(212,168,67,0.12);
-  background: rgba(60, 30, 20, 0.4);
+    0 0 30px rgba(79, 209, 197, 0.15);
+  background: rgba(16, 26, 42, 0.45);
 }
 
 .feature-icon {
@@ -2728,16 +2731,16 @@ body[data-theme="cyberpunk"] {
   <!-- Hero -->
   <section class="landing-hero">
     <div class="landing-hero-glass">
-      <span class="landing-eyebrow">♟ AI-Powered Chess Platform</span>
+      <span class="landing-eyebrow">AI-Powered Chess Platform</span>
       <h2 class="landing-title">Master the Board.<br>Outsmart the Machine.</h2>
       <p class="landing-subtitle">
         Play against AI opponents from beginner to grandmaster level,<br>
         explore exotic Fairy Chess pieces, and analyze your games with a built-in coach.
       </p>
       <div class="landing-cta-group">
-        <button class="landing-cta-primary" id="landing-play-now">⚔ Play Now</button>
-        <button class="landing-cta-secondary" id="landing-play-fairy">✨ Try Fairy Chess</button>
-        <button class="landing-cta-secondary" id="landing-analyze">📊 Analyze Games</button>
+        <button class="landing-cta-primary" id="landing-play-now">Play Now</button>
+        <button class="landing-cta-secondary" id="landing-play-fairy">Try Fairy Chess</button>
+        <button class="landing-cta-secondary" id="landing-analyze">Analyze Games</button>
       </div>
 
       <!-- Miniature Board Preview -->
@@ -2774,25 +2777,21 @@ body[data-theme="cyberpunk"] {
 
     <div class="features-grid">
       <div class="feature-card" id="fc-play" style="--card-accent: #d4a843;">
-        <span class="feature-icon">⚔️</span>
         <h3>Play vs AI</h3>
         <p>Challenge 5 unique bots from Pixel Pawn (beginner) to the Grandmaster — each with their own personality and play style. Set any time control.</p>
         <span class="feature-card-btn">Choose Opponent →</span>
       </div>
       <div class="feature-card" id="fc-fairy" style="--card-accent: #9b59b6;">
-        <span class="feature-icon">🔮</span>
         <h3>Fairy Chess</h3>
         <p>Play with exotic pieces: the Chancellor (Rook+Knight), Zebra leaper, Dragon (Bishop+Knight), and the all-powerful Amazon. A whole new game.</p>
         <span class="feature-card-btn">Enter Fairy Realm →</span>
       </div>
       <div class="feature-card" id="fc-analyze" style="--card-accent: #3498db;">
-        <span class="feature-icon">📊</span>
         <h3>Game Analysis</h3>
         <p>Import your Chess.com games and get a full review with move-by-move accuracy ratings, brilliant moves, blunders, and AI coaching commentary.</p>
         <span class="feature-card-btn">Analyze My Games →</span>
       </div>
       <div class="feature-card" id="fc-editor" style="--card-accent: #2ecc71;">
-        <span class="feature-icon">🎨</span>
         <h3>Board Editor</h3>
         <p>Build any custom position from scratch. Place pieces exactly where you want, then play or analyze that specific position against the AI.</p>
         <span class="feature-card-btn">Open Editor →</span>
@@ -2906,9 +2905,9 @@ body[data-theme="cyberpunk"] {
     <!-- Review Panel (hidden until review starts) -->
     <div class="review-panel" id="review-panel">
       <div class="panel-header">
-        <h3>⭐ Game Review</h3>
+        <h3>Game Review</h3>
         <div style="display:flex; gap:6px; align-items:center;">
-          <button class="btn" id="btn-toggle-speech" title="Toggle Auto Coach Audio" style="padding: 4px 8px; font-size: 11px; display:flex; align-items:center; gap:4px; background:var(--bg-surface); border:1px solid var(--border); cursor:pointer;">🔊 Auto Speak: Off</button>
+          <button class="btn" id="btn-toggle-speech" title="Toggle Auto Coach Audio" style="padding: 4px 8px; font-size: 11px; display:flex; align-items:center; gap:4px; background:var(--bg-surface); border:1px solid var(--border); cursor:pointer;">Auto Speak: Off</button>
           <button class="btn" id="btn-exit-review" style="padding: 4px 10px; font-size: 11px;">✕ Exit</button>
         </div>
       </div>
@@ -2935,7 +2934,7 @@ body[data-theme="cyberpunk"] {
     <!-- Board Editor Panel (hidden by default) -->
     <div class="editor-panel" id="editor-panel" style="display: none; height: auto; margin-bottom: 12px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; backdrop-filter: blur(12px);">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:8px;">
-        <h3 style="font-size:14px; font-weight:700; color:var(--accent-bright); text-transform:uppercase; letter-spacing:1px; margin:0;">🎨 Board Editor</h3>
+        <h3 style="font-size:14px; font-weight:700; color:var(--accent-bright); text-transform:uppercase; letter-spacing:1px; margin:0;">Board Editor</h3>
         <button class="btn btn-secondary" id="btn-editor-cancel" style="padding:4px 8px; font-size:10px;">Exit</button>
       </div>
       
@@ -2980,7 +2979,7 @@ body[data-theme="cyberpunk"] {
           <div class="palette-item" data-piece="z" title="Black Amazon" style="width:30px; height:30px; cursor:pointer; font-size:16px; font-weight:900; color:#fff; display:flex; align-items:center; justify-content:center; border:1.5px solid var(--border); border-radius:6px; background-color:rgba(255,255,255,0.02);">z</div>
         </div>
         <div style="display:flex; gap:6px; margin-top:4px;">
-          <button class="palette-item eraser active" id="editor-eraser" data-piece="erase" style="flex:1; border:1px solid var(--accent); background:none; font-size:11px; border-radius:6px; cursor:pointer; height:26px; color:var(--text-secondary); display:flex; align-items:center; justify-content:center; gap:4px;">🧹 Eraser Mode</button>
+          <button class="palette-item eraser active" id="editor-eraser" data-piece="erase" style="flex:1; border:1px solid var(--accent); background:none; font-size:11px; border-radius:6px; cursor:pointer; height:26px; color:var(--text-secondary); display:flex; align-items:center; justify-content:center; gap:4px;">Eraser Mode</button>
           <button class="btn btn-secondary" id="btn-editor-main-clear" style="padding:0 8px; font-size:11px; height:26px; justify-content:center;">Clear Board</button>
           <button class="btn btn-secondary" id="btn-editor-main-reset" style="padding:0 8px; font-size:11px; height:26px; justify-content:center;">Reset Board</button>
         </div>
@@ -2996,10 +2995,10 @@ body[data-theme="cyberpunk"] {
     
     <div class="controls-panel">
       <div class="controls-grid">
-        <button class="btn" id="btn-hint">💡 Hint</button>
+        <button class="btn" id="btn-hint">Hint</button>
         <button class="btn" id="btn-flip-2">⇅ Flip</button>
         <button class="btn btn-danger" id="btn-resign">⚑ Resign</button>
-        <button class="btn" id="btn-export">📋 PGN</button>
+        <button class="btn" id="btn-export">PGN</button>
       </div>
     </div>
   </div>
@@ -3203,7 +3202,7 @@ body[data-theme="cyberpunk"] {
 <!-- Game Over Modal -->
 <div class="modal-overlay" id="game-over-modal">
   <div class="modal">
-    <div class="game-over-icon" id="game-over-icon">🏆</div>
+    <div class="game-over-icon" id="game-over-icon">♔</div>
     <div class="game-over-result" id="game-over-result">Checkmate</div>
     <div class="game-over-detail" id="game-over-detail">White wins by checkmate</div>
     <div class="game-over-stats">
@@ -4447,7 +4446,7 @@ class GameController {
       toggleSpeechBtn.addEventListener('click', () => {
         this.autoSpeak = !this.autoSpeak;
         if (this.autoSpeak) {
-          toggleSpeechBtn.textContent = '🔊 Auto Speak: On';
+          toggleSpeechBtn.textContent = 'Auto Speak: On';
           toggleSpeechBtn.style.borderColor = 'var(--success)';
           toggleSpeechBtn.style.color = 'var(--success)';
           
@@ -4464,7 +4463,7 @@ class GameController {
             this.speakText(textToSpeak);
           }
         } else {
-          toggleSpeechBtn.textContent = '🔊 Auto Speak: Off';
+          toggleSpeechBtn.textContent = 'Auto Speak: Off';
           toggleSpeechBtn.style.borderColor = '';
           toggleSpeechBtn.style.color = '';
           window.speechSynthesis.cancel(); // Stop talking
@@ -4969,7 +4968,7 @@ class GameController {
 
     // Update bot names
     const botName = this.selectedBot.name;
-    const botAvatar = this.selectedBot.avatar || '🤖';
+    const botAvatar = this.selectedBot.avatar || 'CPU';
     if (color === 'w') {
       this.whitePlayerName = 'You';
       this.blackPlayerName = botName;
@@ -5681,36 +5680,36 @@ class GameController {
     
     if (reason === 'checkmate') {
       if (winner === this.playerColor) {
-        icon = '🏆';
+        icon = '♔';
         result = 'Victory!';
         detail = `Checkmate — You defeated ${this.selectedBot.name}`;
       } else {
-        icon = '⚔️';
+        icon = '♚';
         result = 'Defeat';
         detail = `Checkmate — ${this.selectedBot.name} wins`;
       }
     } else if (reason === 'resign') {
       if (winner === this.playerColor) {
-        icon = '🏆';
+        icon = '♔';
         result = 'Victory!';
         detail = `${this.selectedBot.name} resigned`;
       } else {
-        icon = '🏳️';
+        icon = '⚐';
         result = 'Defeat';
         detail = 'You resigned';
       }
     } else if (reason === 'timeout') {
       if (winner === this.playerColor) {
-        icon = '🏆';
+        icon = '♔';
         result = 'Victory!';
         detail = `${this.selectedBot.name} ran out of time`;
       } else {
-        icon = '⏱️';
+        icon = '⌛';
         result = 'Defeat';
         detail = 'You ran out of time';
       }
     } else {
-      icon = '🤝';
+      icon = '½';
       result = 'Draw';
       const reasons = {
         stalemate: 'Stalemate',
@@ -5967,7 +5966,7 @@ class GameController {
           </div>
           <div class="rc-title" style="display:flex; align-items:center; gap:8px;">
             <span>${playedMove.san} is ${catNames[cls]}</span>
-            <button id="btn-speak-commentary" title="Listen to Coach" style="background:none; border:none; cursor:pointer; font-size:14px; color:var(--text-secondary); transition:color 0.2s; display:inline-flex; align-items:center; justify-content:center; padding:2px;">🔊</button>
+            <button id="btn-speak-commentary" title="Listen to Coach" style="background:none; border:none; cursor:pointer; font-size:14px; color:var(--text-secondary); transition:color 0.2s; display:inline-flex; align-items:center; justify-content:center; padding:2px;">☊</button>
           </div>
           <div class="rc-desc">${commentary}</div>
         </div>
@@ -6539,7 +6538,7 @@ class GameController {
         <div class="rc-text">
           <div class="rc-title" style="display:flex; align-items:center; gap:8px;">
             <span>${playedMove.san} is ${catNames[cls]}</span>
-            <button id="btn-speak-commentary" title="Listen to Coach" style="background:none; border:none; cursor:pointer; font-size:14px; color:var(--text-secondary); transition:color 0.2s; display:inline-flex; align-items:center; justify-content:center; padding:2px;">🔊</button>
+            <button id="btn-speak-commentary" title="Listen to Coach" style="background:none; border:none; cursor:pointer; font-size:14px; color:var(--text-secondary); transition:color 0.2s; display:inline-flex; align-items:center; justify-content:center; padding:2px;">☊</button>
           </div>
           <div class="rc-desc">${commentary}</div>
         </div>
