@@ -3426,7 +3426,7 @@ class GameController {
     this.gameOver = false;
     
     // Game history for Review Mode
-    this.positionHistory = [this.game.fen()];
+    this.positionHistory = [this.getFairyFEN()];
     this.moveHistory = [];
     this.currentHistoryIndex = 0;
     this.moveAnalysisCache = {};
@@ -4108,12 +4108,12 @@ class GameController {
       
       // Re-initialize local game histories
       const loadGame = new Chess();
-      this.positionHistory = [loadGame.fen()];
+      this.positionHistory = [this.getFairyFEN(loadGame)];
       this.moveHistory = [];
       
       for (const move of moves) {
         loadGame.move(move);
-        this.positionHistory.push(loadGame.fen());
+        this.positionHistory.push(this.getFairyFEN(loadGame));
         this.moveHistory.push(move);
       }
       
@@ -4165,7 +4165,7 @@ class GameController {
     this.gameStartTime = Date.now();
     
     // Reset history
-    this.positionHistory = [this.game.fen()];
+    this.positionHistory = [this.getFairyFEN()];
     this.moveHistory = [];
     this.currentHistoryIndex = 0;
     this.moveAnalysisCache = {};
@@ -4667,7 +4667,7 @@ class GameController {
     this.legalMoves = [];
     
     // Save history
-    this.positionHistory.push(this.game.fen());
+    this.positionHistory.push(this.getFairyFEN());
     this.moveHistory.push(move);
     this.currentHistoryIndex = this.positionHistory.length - 1;
     
@@ -4743,7 +4743,7 @@ class GameController {
     if (move) {
       this.lastMove = move;
       
-      this.positionHistory.push(this.game.fen());
+      this.positionHistory.push(this.getFairyFEN());
       this.moveHistory.push(move);
       this.currentHistoryIndex = this.positionHistory.length - 1;
       
@@ -4765,7 +4765,7 @@ class GameController {
         move = this.game.move(randomMove);
         this.lastMove = move;
         
-        this.positionHistory.push(this.game.fen());
+        this.positionHistory.push(this.getFairyFEN());
         this.moveHistory.push(move);
         this.currentHistoryIndex = this.positionHistory.length - 1;
         
@@ -4802,7 +4802,7 @@ class GameController {
           const move = history[history.length - 1];
           this.lastMove = move;
           
-          this.positionHistory.push(this.game.fen());
+          this.positionHistory.push(this.getFairyFEN());
           this.moveHistory.push(move);
           this.currentHistoryIndex = this.positionHistory.length - 1;
           
@@ -5234,23 +5234,33 @@ class GameController {
   }
 
   analyzeSpecificMove(playedMove, prevFEN, postFEN) {
-    const prevGame = new Chess(prevFEN);
-    const postGame = new Chess(postFEN);
+    const savedActiveFairyMap = this.isFairyGame ? { ...this.fairyPieceMap } : null;
+    
+    const prevStandardFEN = this.isFairyGame ? this.setupFairyGameFromFEN(prevFEN) : prevFEN;
+    const postStandardFEN = this.isFairyGame ? this.setupFairyGameFromFEN(postFEN) : postFEN;
+    
+    const prevGame = new Chess(prevStandardFEN);
+    const postGame = new Chess(postStandardFEN);
     const prevTurn = prevGame.turn();
     
     // 1. Check if Book Move
+    if (this.isFairyGame) this.setupFairyGameFromFEN(prevFEN);
     const bookMove = this.engine.getBookMove(prevGame);
     if (bookMove && bookMove.san === playedMove.san) {
+      if (this.isFairyGame) this.setupFairyGameFromFEN(postFEN);
+      const playedScore = this.engine.getEvaluation(postGame);
+      if (this.isFairyGame) this.fairyPieceMap = savedActiveFairyMap;
       return {
         classification: 'book',
         bestMove: bookMove,
-        playedScore: this.engine.getEvaluation(postGame),
-        bestScore: this.engine.getEvaluation(postGame),
+        playedScore: playedScore,
+        bestScore: playedScore,
         loss: 0
       };
     }
     
     // 2. Find best move
+    if (this.isFairyGame) this.setupFairyGameFromFEN(prevFEN);
     const bestMove = this.engine.getBestMove(prevGame, { 
       depth: 2, 
       randomness: 0, 
@@ -5259,12 +5269,15 @@ class GameController {
     }, 600);
     
     if (!bestMove) {
+      if (this.isFairyGame) this.fairyPieceMap = savedActiveFairyMap;
       return { classification: 'best', bestMove: playedMove, loss: 0 };
     }
     
     // 3. Evaluations
+    if (this.isFairyGame) this.setupFairyGameFromFEN(postFEN);
     const playedScore = this.engine.getEvaluation(postGame);
     
+    if (this.isFairyGame) this.setupFairyGameFromFEN(prevFEN);
     prevGame.move(bestMove);
     const bestScore = this.engine.getEvaluation(prevGame);
     
@@ -5300,6 +5313,8 @@ class GameController {
       classification = 'blunder';
     }
     
+    if (this.isFairyGame) this.fairyPieceMap = savedActiveFairyMap;
+    
     return {
       classification,
       bestMove,
@@ -5316,18 +5331,27 @@ class GameController {
     const prevFEN = this.positionHistory[index - 1];
     const postFEN = this.positionHistory[index];
     
-    const prevGame = new Chess(prevFEN);
-    const postGame = new Chess(postFEN);
+    const savedActiveFairyMap = this.isFairyGame ? { ...this.fairyPieceMap } : null;
+    
+    const prevStandardFEN = this.isFairyGame ? this.setupFairyGameFromFEN(prevFEN) : prevFEN;
+    const postStandardFEN = this.isFairyGame ? this.setupFairyGameFromFEN(postFEN) : postFEN;
+    
+    const prevGame = new Chess(prevStandardFEN);
+    const postGame = new Chess(postStandardFEN);
     const prevTurn = prevGame.turn();
     
     // 1. Check if it's a Book move
+    if (this.isFairyGame) this.setupFairyGameFromFEN(prevFEN);
     const bookMove = this.engine.getBookMove(prevGame);
     if (bookMove && bookMove.san === playedMove.san) {
+      if (this.isFairyGame) this.setupFairyGameFromFEN(postFEN);
+      const playedScore = this.engine.getEvaluation(postGame);
+      if (this.isFairyGame) this.fairyPieceMap = savedActiveFairyMap;
       const result = {
         classification: 'book',
         bestMove: bookMove,
-        playedScore: this.engine.getEvaluation(postGame),
-        bestScore: this.engine.getEvaluation(postGame),
+        playedScore: playedScore,
+        bestScore: playedScore,
         loss: 0
       };
       this.moveAnalysisCache[index] = result;
@@ -5335,6 +5359,7 @@ class GameController {
     }
     
     // 2. Find the best move in the previous position
+    if (this.isFairyGame) this.setupFairyGameFromFEN(prevFEN);
     const bestMove = this.engine.getBestMove(prevGame, { 
       depth: 2, 
       randomness: 0, 
@@ -5343,12 +5368,15 @@ class GameController {
     }, 600);
     
     if (!bestMove) {
+      if (this.isFairyGame) this.fairyPieceMap = savedActiveFairyMap;
       return { classification: 'best', bestMove: playedMove, loss: 0 };
     }
     
     // 3. Get evaluation for played move and best move
+    if (this.isFairyGame) this.setupFairyGameFromFEN(postFEN);
     const playedScore = this.engine.getEvaluation(postGame);
     
+    if (this.isFairyGame) this.setupFairyGameFromFEN(prevFEN);
     prevGame.move(bestMove);
     const bestScore = this.engine.getEvaluation(prevGame);
     
@@ -5363,8 +5391,6 @@ class GameController {
     
     // 4. Classify move
     let classification = 'good';
-    
-    // Check for "Miss" first (missed a winning chance)
     const isPlayerWhite = (prevTurn === 'w');
     const playerBestScore = isPlayerWhite ? bestScore : -bestScore;
     
@@ -5372,7 +5398,6 @@ class GameController {
       classification = 'miss';
     } else if (loss <= 0.05) {
       if (playedMove.san === bestMove.san) {
-        // Heuristic for Brilliant (e.g. sacrifice or high-depth tactical best move)
         const isSacrifice = playedMove.san.includes('x') && Math.abs(playerBestScore) > 1.0 && Math.random() < 0.15;
         classification = isSacrifice ? 'brilliant' : 'best';
       } else {
@@ -5387,6 +5412,8 @@ class GameController {
     } else {
       classification = 'blunder';
     }
+    
+    if (this.isFairyGame) this.fairyPieceMap = savedActiveFairyMap;
     
     const result = {
       classification,
@@ -6332,7 +6359,7 @@ class GameController {
     this.lastMove = null;
     this.gameOver = false;
     this.gameStartTime = Date.now();
-    this.positionHistory = [this.game.fen()];
+    this.positionHistory = [this.getFairyFEN()];
     this.moveHistory = [];
     this.currentHistoryIndex = 0;
     this.moveAnalysisCache = {};
@@ -6638,7 +6665,7 @@ class GameController {
         
         const loadFEN = this.isFairyGame ? this.setupFairyGameFromFEN(fen) : fen;
         this.game = new Chess(loadFEN);
-        this.positionHistory = [this.game.fen()];
+        this.positionHistory = [this.getFairyFEN()];
         this.moveHistory = [];
         this.currentHistoryIndex = 0;
         this.moveAnalysisCache = {};
@@ -6648,6 +6675,38 @@ class GameController {
         this.showToast('Custom position saved. Analysis Mode started!', 'success');
       });
     }
+  }
+
+  getFairyFEN(game = this.game) {
+    const fen = game.fen();
+    if (!this.isFairyGame || !this.fairyPieceMap) return fen;
+    const parts = fen.split(' ');
+    const rows = parts[0].split('/');
+    const fairyRows = [];
+    for (let r = 0; r < 8; r++) {
+      let fairyRow = '';
+      let fileIdx = 0;
+      for (let i = 0; i < rows[r].length; i++) {
+        const char = rows[r][i];
+        if (isNaN(char)) {
+          const sq = String.fromCharCode(97 + fileIdx) + (8 - r);
+          if (this.fairyPieceMap[sq]) {
+            const lower = this.fairyPieceMap[sq];
+            const upper = lower.toUpperCase();
+            fairyRow += (char === char.toUpperCase() ? upper : lower);
+          } else {
+            fairyRow += char;
+          }
+          fileIdx++;
+        } else {
+          fairyRow += char;
+          fileIdx += parseInt(char);
+        }
+      }
+      fairyRows.push(fairyRow);
+    }
+    parts[0] = fairyRows.join('/');
+    return parts.join(' ');
   }
 
   setupFairyGameFromFEN(fen) {
