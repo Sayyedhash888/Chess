@@ -1,0 +1,4 @@
+# Disable Jekyll rendering for static HTML/JS site
+plugins: []
+include:
+  - .nojekyll
